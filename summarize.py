@@ -8,3 +8,4 @@ def trial(filename):
     final_dict = pipe.summarize(src_list)
     summary = pipe.t5(final_dict)
     return summary
+

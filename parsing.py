@@ -38,7 +38,7 @@ def parse_txt(data):
         if 'Text' in element and element['Text'].lower().strip()=="references":
             #print("Here")
             break
-        if 'Text' in element and (element['Path'][:12]=='//Document/P' or element['Text'].lower().strip()=="abstract"):
+        if 'Text' in element and ('/Document' in element['Path'] or element['Text'].lower().strip()=="abstract"):
             figu = re.search(fig, element['Text'])
             tablu = re.search(table, element['Text'])
             if (figu or tablu):

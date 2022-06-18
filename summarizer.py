@@ -4,7 +4,8 @@ from sklearn.cluster import SpectralClustering
 import torch
 import nltk.data
 from transformers import T5Tokenizer, T5ForConditionalGeneration
-T5_PATH = "t5-large"
+from nltk.tokenize import sent_tokenize, word_tokenize
+T5_PATH = "t5-base"
 t5_model = T5ForConditionalGeneration.from_pretrained(T5_PATH)
 t5_tokenizer = T5Tokenizer.from_pretrained(T5_PATH)
 
@@ -61,7 +62,7 @@ class SummPip():
         src_list = []
         for doc in docs:
             doc = doc.replace(tag,"")
-            sent_list = self.sent_detector.tokenize(doc.strip()) 
+            sent_list = sent_tokenize(doc)
             src_list.append(sent_list)
         return src_list
     def summarize(self, src_list):

@@ -117,10 +117,7 @@ class SummPip():
             output = t5_tokenizer.decode(summary_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
             final_dict[num] = output
         summary = ""
-        for num, text in final_dict.items():
-            summary += text + " "
-        arr=summary.split('.')
-        for i in range(len(arr)):
-            arr[i]=arr[i].capitalize()
-        summary='. '.join(arr)
+        # for num, text in final_dict.items():
+        #     summary += text + " "
+        summary = ' '.join([n.strip().capitalize() for n in final_dict.values()])
         return summary

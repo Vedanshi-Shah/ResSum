@@ -25,7 +25,7 @@ greek = re.compile(r"[^.]*[α-ωΑ-Ω][^.]*.")
 hyperlinks = re.compile(r"(https:)[^ ]+")
 
 def read_file(NAME, encoding="utf-8"):
-    with open(f"json-output/{NAME}.json", "r", encoding=encoding) as f:
+    with open(f"{NAME}.json", "r", encoding=encoding) as f:
         data = json.loads(f.read())
     f.close()
     return data['elements']
@@ -61,7 +61,7 @@ def parser(txt):
     return txt
 
 def write_file(txt, NAME, encoding="utf-8"):
-    with open(f'parsed-output/{NAME}.txt', "w", encoding=encoding) as f:
+    with open(f'{NAME}.txt', "w", encoding=encoding) as f:
         f.write(txt)
     f.close()
 

@@ -3,8 +3,8 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 
 def lex_rank(name):
-    inp = f"parsed-output/{name}.txt"
-    out = f"parsed-output/{name}.txt"
+    inp = f"{name}.txt"
+    out = f"{name}.txt"
     with open(inp, "r", encoding="utf-8") as f:
         sample_text = f.read()
     f.close()

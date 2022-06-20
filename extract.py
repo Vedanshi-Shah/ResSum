@@ -2,7 +2,7 @@ import logging
 import os.path
 import zipfile
 from os import rename
-
+import shutil
 from adobe.pdfservices.operation.auth.credentials import Credentials
 from adobe.pdfservices.operation.exception.exceptions import ServiceApiException, ServiceUsageException, SdkException
 from adobe.pdfservices.operation.pdfops.options.extractpdf.extract_pdf_options import ExtractPDFOptions
@@ -12,7 +12,14 @@ from adobe.pdfservices.operation.io.file_ref import FileRef
 from adobe.pdfservices.operation.pdfops.extract_pdf_operation import ExtractPDFOperation
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
-
+def save(sf,df):
+    abs_path=os.path.abspath(df)
+    dir=os.path.dirname(abs_path)
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+    if not os.path.exists(abs_path):
+        shutil.move(sf,abs_path)
+        return
 def extract(NAME):
     try:
         # get base path.
@@ -30,7 +37,7 @@ def extract(NAME):
         extract_pdf_operation = ExtractPDFOperation.create_new()
 
         # Set operation input from a source file.
-        source = FileRef.create_from_local_file(base_path + f"papers/{NAME}.pdf")
+        source = FileRef.create_from_local_file(base_path + f"{NAME}.pdf")
         extract_pdf_operation.set_input(source)
 
         # Build ExtractPDF options and set them into the operation
@@ -43,13 +50,14 @@ def extract(NAME):
         result: FileRef = extract_pdf_operation.execute(execution_context)
 
         # Save the result to the specified location.
-        result.save_as(base_path + f"output/{NAME}.zip")
+        #result.save_as(base_path + f"{NAME}.zip")
+        save(result._file_path,base_path + f"{NAME}.zip")
         # Extract zip
-        with zipfile.ZipFile(f"{base_path}output/{NAME}.zip", 'r') as zip_ref:
-            zip_ref.extractall(f"{base_path}json-output/")
+        with zipfile.ZipFile(f"{base_path}{NAME}.zip", 'r') as zip_ref:
+            zip_ref.extractall(f"{base_path}")
         zip_ref.close()
         # Rename json
-        src = f"{base_path}json-output/structuredData.json"
-        os.rename(src, f"{base_path}json-output/{NAME}.json")
+        src = f"{base_path}structuredData.json"
+        os.rename(src, f"{base_path}{NAME}.json")
     except (ServiceApiException, ServiceUsageException, SdkException):
         logging.exception("Exception encountered while executing operation")

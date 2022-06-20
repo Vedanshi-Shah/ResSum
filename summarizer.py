@@ -3,12 +3,28 @@ from utils import *
 from sklearn.cluster import SpectralClustering
 import torch
 import nltk.data
-from transformers import T5Tokenizer, T5ForConditionalGeneration
 from nltk.tokenize import sent_tokenize, word_tokenize
-T5_PATH = "t5-base"
-t5_model = T5ForConditionalGeneration.from_pretrained(T5_PATH)
-t5_tokenizer = T5Tokenizer.from_pretrained(T5_PATH)
+# T5_PATH = "t5-large"
+# t5_model = T5ForConditionalGeneration.from_pretrained(T5_PATH)
+# t5_tokenizer = T5Tokenizer.from_pretrained(T5_PATH)
+from fastT5 import get_onnx_model, get_onnx_runtime_sessions, OnnxT5
+from transformers import T5Config,AutoTokenizer
+from pathlib import Path
+import os
 
+trained_model_path = './t5-large'
+
+pretrained_model_name = Path(trained_model_path).stem
+
+encoder_path = os.path.join(trained_model_path, f"{pretrained_model_name}-encoder-quantized.onnx")
+decoder_path = os.path.join(trained_model_path, f"{pretrained_model_name}-decoder-quantized.onnx")
+init_decoder_path = os.path.join(trained_model_path, f"{pretrained_model_name}-init-decoder-quantized.onnx")
+
+model_paths = encoder_path, decoder_path, init_decoder_path
+model_sessions = get_onnx_runtime_sessions(model_paths)
+t5_model = OnnxT5(trained_model_path, model_sessions)
+
+t5_tokenizer = AutoTokenizer.from_pretrained(trained_model_path)
 class SummPip():
     def __init__(self, nb_clusters,nb_words):
         """

@@ -9,3 +9,6 @@ Research Paper Summarization
 5) Run main.py or run **uvicorn main:app --reload** to start the backend
 6) Start the frontend by running **npm start**
 7) Summarize some research papers!
+
+# Example
+![Page showing Research Paper's pdf on left and its summary on the right](main.png)

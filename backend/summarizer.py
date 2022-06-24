@@ -12,7 +12,7 @@ from transformers import T5Config,AutoTokenizer
 from pathlib import Path
 import os
 
-trained_model_path = './backend/t5-large'
+trained_model_path = './t5-large'
 
 pretrained_model_name = Path(trained_model_path).stem
 

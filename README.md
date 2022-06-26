@@ -1,4 +1,4 @@
-# ResSum-Backend
+# ResSum
 Research Paper Summarization
 
 # Getting Started

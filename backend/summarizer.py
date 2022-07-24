@@ -151,6 +151,7 @@ class SummPip():
                 tmp+=sent
             summary[i] = tmp
             i+=1
+        # print(summary)
         return summary
         # print(cluster_dict)
         # print("--------------------------------------------------------------------")

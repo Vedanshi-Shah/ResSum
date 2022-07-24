@@ -6,6 +6,7 @@ def trial(filename):
     pipe = SummPip(nb_clusters = 10, nb_words = 15)
     src_list = pipe.split_sentences(docs)
     final_dict = pipe.summarize(src_list)
+    print(final_dict)
     summary = pipe.t5(final_dict)
     return summary
 

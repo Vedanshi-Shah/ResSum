@@ -23,6 +23,8 @@ references_curly = re.compile(r"{[a-zA-Z,.;\- ]*[0-9]+[^}]*}")
 greek = re.compile(r"[^.]*[α-ωΑ-Ω][^.]*.")
 # hyperlinks
 hyperlinks = re.compile(r"(https:)[^ ]+")
+# Alphabets
+alpha = re.compile(r"[A-Z a-z]+")
 
 def read_file(NAME, encoding="utf-8"):
     with open(f"{NAME}.json", "r", encoding=encoding) as f:
@@ -30,29 +32,48 @@ def read_file(NAME, encoding="utf-8"):
     f.close()
     return data['elements']
 
-def parse_txt(data):
-    elements = data
+def parse_txt(NAME):
+    with open(f"{NAME}.json", "r", encoding="utf-8") as f:
+        data = json.loads(f.read())
+    f.close()
     out_data = ""
-    for element in elements:
-        # Check for Text attribute. Don't take anything after encountering references as a heading
-        if 'Text' in element and element['Text'].lower().strip()=="references":
-            #print("Here")
-            break
-        if 'Text' in element and ('/Document' in element['Path'] or element['Text'].lower().strip()=="abstract"):
-            figu = re.search(fig, element['Text'])
-            tablu = re.search(table, element['Text'])
-            if (figu or tablu):
-                continue
-            out_data += "\n" + element['Text']
-    out_data = parser(out_data)
-    return out_data
+    sections = {}
+    prevHeader = ""
+    for element in data['elements']:
+        if '/Document/H1' in element['Path']:
+            heading = element.get("Text", "")
+            if (heading!=""):
+                heading = re.findall(alpha, heading)[0].strip().title()
+                print(heading)
+                sections[heading] = ""
+                prevHeader = heading
+        if 'Document/H2' in element['Path']:
+            if (prevHeader!=""):
+                heading  = element.get('Text', "").strip().title()
+                text = f"\n ### {heading}  "
+                sections[prevHeader] += text
+        if 'Document/H3' in element['Path']:
+            if prevHeader!="":
+                heading  = element.get('Text', "").strip().title()
+                text = f"\n #### {heading}  "
+                sections[prevHeader] += text
+        if '/Document/P' in element['Path']:
+            if prevHeader!="":
+                text = element.get('Text', "")
+                sections[prevHeader] += f"{text}  "
+    tmp_sections = {}
+    for section, section_txt in sections.items():
+        tmp_sections[section] = parser(section_txt)
+    with open("sections.json", "w") as f:
+        json.dump(tmp_sections, f, indent=4)
+    f.close()
     
 def parser(txt):
     txt = re.sub(links, "", txt)
     txt = re.sub("\n", "", txt)
     # Comment if does not work
     # txt = txt[txt.lower().find('abstract'):]
-    txt = re.sub("-", "", txt)
+    txt = re.sub("-", " ", txt)
     txt = re.sub(references_rounds, "", txt)
     txt = re.sub(references_square, "", txt)
     txt = re.sub(references_curly, "", txt)
@@ -73,9 +94,8 @@ def sectionify(NAME):
     prevHeader = ""
     for element in data['elements']:
         if '/Document/H1' in element['Path']:
-            if (element.get("Text", "") != ""):
-                sections[element.get('Text', "")] = ""
-                prevHeader = element.get('Text', "")
+            sections[element.get('Text', "")] = ""
+            prevHeader = element.get('Text', "")
         if 'Document/H2' in element['Path']:
             if (prevHeader!=""):
                 # print(element.get('Text', "None"))
@@ -91,7 +111,22 @@ def sectionify(NAME):
 
 def parse(NAME):
     print("Parsing")
-    data = read_file(NAME)
-    sectionify(NAME)
-    txt = parse_txt(data)
-    write_file(txt, NAME)
+    # data = read_file(NAME)
+    parse_txt(NAME)
+    # write_file(txt, NAME)
+
+
+
+# ------------------------------- DON'T CONDEMN THE PAST -------------------------------=
+# parser:
+# for element in elements:
+        # # Check for Text attribute. Don't take anything after encountering references as a heading
+        # if 'Text' in element and element['Text'].lower().strip()=="references":
+        #     #print("Here")
+        #     break
+        # if 'Text' in element and ('/Document' in element['Path'] or element['Text'].lower().strip()=="abstract"):
+        #     figu = re.search(fig, element['Text'])
+        #     tablu = re.search(table, element['Text'])
+        #     if (figu or tablu):
+        #         continue
+        #     out_data += "\n" + element['Text']

@@ -5,7 +5,7 @@ from pathlib import Path
 from extract import extract
 from parsing import parse
 from exsum import lex_rank
-from summarize import trial
+# from summarize import trial
 from firebase_admin import credentials, initialize_app, storage
 import os
 import shutil
@@ -47,7 +47,7 @@ def remove_files(name):
 def get(filename: str):
     extract(filename)
     parse(filename)
-    lex_rank(filename)
+    # lex_rank(filename)
     # return {"summary": summary}
 
 def summarizePlease(filename: str):
@@ -62,7 +62,7 @@ def buildTabs(tabs, name):
     f.close()
     i = 0
     for tab in data:
-        print(tab)
+        # print(tab)
         tabs.append(tab)
         i+=1
 
@@ -71,7 +71,7 @@ def buildTabs(tabs, name):
         show_pdf(name)
     while i>1:
         with ts[i-1]:
-            st.markdown(f"# {tabs[i-1]}")
+            st.markdown(f"# {tabs[i-1]} \n")
             st.markdown(data[tabs[i-1]])
         i-=1
 
@@ -98,8 +98,6 @@ def main():
   uploaded_file = st.file_uploader("Upload PDF", type=["pdf"])
   if uploaded_file is not None:
         # Make temp file path from uploaded file
-        with open(uploaded_file.name, "r", encoding="utf-8") as f:
-            f.write()
         with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
             st.markdown("## Original PDF file")
             fp = Path(tmp_file.name)
@@ -110,7 +108,7 @@ def main():
             tabs = ['Paper']
             get('temp')
             buildTabs(tabs, tmp_file.name)
-            summarizePlease('temp')
+            # summarizePlease('temp')
             # st.write(show_pdf(tmp_file.name))
 
 if __name__=="__main__":

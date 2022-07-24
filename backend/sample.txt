@@ -1,0 +1,16 @@
+That is, are there three cubes whose sum is 42?
+This sum of three cubes puzzle, first set in 1954 at the University of Cambridge and known as the Diophantine Equation x3+y3+z3=k, challenged mathematicians to find solutions for numbers 1-100.
+With smaller numbers, this type of equation is easier to solve: for example, 29 could be written as 33 + 13 + 13, while 32 is unsolvable.
+Booker devised an ingenious algorithm and spent weeks on his university’s supercomputer when he recently came up with a solution for 33.
+But when he turned to solve for 42, Booker found that the computing needed was an order of magnitude higher and might be beyond his supercomputer’s capability.
+As Booker found with his solution to 33, they knew they didn’t have to resort to trying all of the possibilities for x, y, and z.
+Otherwise, the main difference between the search for 33 and the search for 42 would be the size of the search and the computer platform used.
+Sutherland is also a fan of Douglas Adams, so the project was irresistible.
+The method of using Charity Engine is similar to part of the plot surrounding the number 42 in the "Hitchhiker" novel: After Deep Thought’s answer of 42 proves unsatisfying to the scientists, who don’t know the question it is meant to answer, the supercomputer decides to compute the Ultimate Question by building a supercomputer powered by Earth … in other words, employing a worldwide massively parallel computation platform.
+They ran a number of computations at a lower capacity to test both their code and the Charity Engine network.
+“Well, any computer can solve the problem, provided you are willing to wait long enough, but with roughly half a million PCs working on the problem in parallel (each with multiple cores), we were able to complete the computation much more quickly than we could have using the Bristol machine (or any of the machines here at MIT),” says Sutherland.
+Using the Charity Engine network is also more energy-efficient.
+As a result, the carbon footprint of this computation — related to the electricity our computations caused the PCs in the network to use above and beyond what they would have used, in any case — is lower than it would have been if we had used a supercomputer.”
+Booker and Sutherland say there are 10 more numbers, from 101-1000, left to be solved, with the next number being 114.
+But both are more interested in a simpler but computationally more challenging puzzle: whether there are more answers for the sum of three cubes for 3.
+“There are four very easy solutions that were known to the mathematician Louis J. Mordell, who famously wrote in 1953, ‘I do not know anything about the integer solutions of x3 + y3 + z3 = 3 beyond the existence of the four triples (1, 1, 1), (4, 4, -5), (4, -5, 4), (-5, 4, 4); and it must be very difficult indeed to find out anything about any other solutions.’ This quote motivated a lot of the interest in the sum of three cubes problem, and the case k=3 in particular.

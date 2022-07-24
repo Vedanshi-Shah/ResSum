@@ -17,20 +17,21 @@ from uvicorn import run
 # import flask
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import streamlit
 
-app = FastAPI()
+# app = FastAPI()
 
-origins = ["*"]
-methods = ["*"]
-headers = ["*"]
+# origins = ["*"]
+# methods = ["*"]
+# headers = ["*"]
 
-app.add_middleware(
-    CORSMiddleware, 
-    allow_origins = origins,
-    allow_credentials = True,
-    allow_methods = methods,
-    allow_headers = headers    
-)
+# app.add_middleware(
+#     CORSMiddleware, 
+#     allow_origins = origins,
+#     allow_credentials = True,
+#     allow_methods = methods,
+#     allow_headers = headers    
+# )
 
 cred = credentials.Certificate('serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
@@ -42,11 +43,33 @@ def remove_files(name):
     os.remove(f"{name}.zip")
     os.remove(f"{name}.pdf")
 
-@app.get("/")
-def test():
-    return {"message": "Hello"}
+# @app.get("/")
+# def test():
+#     return {"message": "Hello"}
 
-@app.get("/extract/{filename}")
+# @app.get("/extract/{filename}")
+# def get(filename: str):
+#     users=db.collection(u'users')
+#     docs=users.stream()
+#     users_list=[]
+#     for doc in docs:
+#         users_list.append(doc.to_dict())
+#     l = None
+#     for u in users_list:
+#         if(u['file_name']==filename):
+#             l=u['file_url']
+#     NAME = filename[0:filename.find(".pdf")]
+#     if (not(l)): 
+#         print("File Not Found")
+#         return {"summary": None}
+#     # urllib.request.urlretrieve(l,filename)
+#     # extract(NAME)
+#     # parse(NAME)
+#     # lex_rank(NAME)
+#     # summary = trial(f"{NAME}.txt")
+#     # remove_files(NAME)
+#     return {"summary": summary}
+
 def get(filename: str):
     users=db.collection(u'users')
     docs=users.stream()
@@ -61,14 +84,15 @@ def get(filename: str):
     if (not(l)): 
         print("File Not Found")
         return {"summary": None}
-    urllib.request.urlretrieve(l,filename)
-    extract(NAME)
-    parse(NAME)
-    lex_rank(NAME)
-    summary = trial(f"{NAME}.txt")
-    remove_files(NAME)
+    # urllib.request.urlretrieve(l,filename)
+    # extract(NAME)
+    # parse(NAME)
+    # lex_rank(NAME)
+    # summary = trial(f"{NAME}.txt")
+    # remove_files(NAME)
     return {"summary": summary}
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
-    run(app, host="0.0.0.0", port=port)
+
+# if __name__ == "__main__":
+#     port = int(os.environ.get('PORT', 5000))
+#     run(app, host="0.0.0.0", port=port)
     

@@ -4,6 +4,7 @@ from sklearn.cluster import SpectralClustering
 import torch
 import nltk.data
 from nltk.tokenize import sent_tokenize, word_tokenize
+import json
 # T5_PATH = "t5-large"
 # t5_model = T5ForConditionalGeneration.from_pretrained(T5_PATH)
 # t5_tokenizer = T5Tokenizer.from_pretrained(T5_PATH)
@@ -12,10 +13,30 @@ from transformers import T5Config,AutoTokenizer
 from pathlib import Path
 import os
 
+# import boto3
+# from botocore.config import Config
+# my_config = Config(
+#     region_name = "us-west-2",
+#     signature_version = 'v4',
+#     retries = {
+#         'max_attempts': 10,
+#         'mode': 'standard'
+#     }
+# )
+# client = boto3.client(
+#     'sagemaker-runtime',
+#     aws_access_key_id="AKIA5VTJBCU57PFFHO3K",
+#     aws_secret_access_key="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",
+#     config=my_config
+# )
+
+# endpoint_name = "t5Large"
+
+trained_model_path = './t5-large'
 trained_model_path = './t5-large'
 
-pretrained_model_name = Path(trained_model_path).stem
 
+pretrained_model_name = Path(trained_model_path).stem
 encoder_path = os.path.join(trained_model_path, f"{pretrained_model_name}-encoder-quantized.onnx")
 decoder_path = os.path.join(trained_model_path, f"{pretrained_model_name}-decoder-quantized.onnx")
 init_decoder_path = os.path.join(trained_model_path, f"{pretrained_model_name}-init-decoder-quantized.onnx")
@@ -116,8 +137,37 @@ class SummPip():
             summary_ids = t5_model.generate(inputs, num_beams=int(2),no_repeat_ngram_size=3,length_penalty=2.0,min_length=50,max_length=500,early_stopping=True)
             output = t5_tokenizer.decode(summary_ids[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
             final_dict[num] = output
-        summary = ""
+        # summary = ""
+        summary = []
         # for num, text in final_dict.items():
         #     summary += text + " "
-        summary = ' '.join([n.strip().capitalize() for n in final_dict.values()])
+        # summary = ' '.join([n.strip().capitalize() for n in final_dict.values()])
+        summary = list(final_dict.values())
+        i = 0
+        for summ in summary:
+            tmp = ""
+            for sent in sent_tokenize(summ):
+                sent.strip().capitalize()
+                tmp+=sent
+            summary[i] = tmp
+            i+=1
         return summary
+        # print(cluster_dict)
+        # print("--------------------------------------------------------------------")
+        # for i, sents in cluster_dict.items():
+        #     body = json.dumps({"inputs": sents})
+        #     print("--------------------------------------------------------------------")
+        #     print(body)
+        #     print("--------------------------------------------------------------------")
+        #     # ------AWS-------
+        #     # res = client.invoke_endpoint(
+        #     #     EndpointName=endpoint_name,
+        #     #     Body=body,
+        #     #     ContentType='application/json'
+        #     # )
+        #     # result = json.loads(res['Body'].read().decode())
+        #     # -----------------
+        #     print(result)
+        #     print("#######")
+        # print("--------------------------------------------------------------------")
+        # return result

@@ -1,5 +1,5 @@
-FROM python:3.7-stretch
-LABEL maintainer="vedanshi283@gmail.com"
+FROM python:3.8
+LABEL maintainer="curiyash19@gmail.com"
 EXPOSE 8000
 RUN  mkdir -p  /ResSum-Backend
 WORKDIR  /ResSum-Backend

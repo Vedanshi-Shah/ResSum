@@ -65,7 +65,33 @@ def write_file(txt, NAME, encoding="utf-8"):
         f.write(txt)
     f.close()
 
+def sectionify(NAME):
+    with open(f"{NAME}.json", "r", encoding="utf-8") as f:
+        data = json.loads(f.read())
+    f.close()
+    sections = {}
+    prevHeader = ""
+    for element in data['elements']:
+        if '/Document/H1' in element['Path']:
+            if (element.get("Text", "") != ""):
+                sections[element.get('Text', "")] = ""
+                prevHeader = element.get('Text', "")
+        if 'Document/H2' in element['Path']:
+            if (prevHeader!=""):
+                # print(element.get('Text', "None"))
+                head = element.get('Text', "")
+                text = f"\n ### {head}\n"
+                sections[prevHeader] += text
+        if '/Document/P' in element['Path']:
+            if (prevHeader!=""):
+                sections[prevHeader] += element.get('Text', "")
+    with open("sections.json", "w") as f:
+        json.dump(sections, f, indent=4)
+    f.close()
+
 def parse(NAME):
+    print("Parsing")
     data = read_file(NAME)
+    sectionify(NAME)
     txt = parse_txt(data)
     write_file(txt, NAME)

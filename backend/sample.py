@@ -24,8 +24,9 @@ for tab in data:
 ts = st.tabs(tabs)
 while i>0:
     with ts[i-1]:
-        st.write(tabs[i-1])
-        st.write(data[tabs[i-1]])
+        st.markdown(tabs[i-1])
+        for t in data[tabs[i-1]].split('\n'):
+            st.markdown(t)
     i-=1
 
 if (hello):

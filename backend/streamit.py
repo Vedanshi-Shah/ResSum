@@ -72,7 +72,8 @@ def buildTabs(tabs, name):
     while i>1:
         with ts[i-1]:
             st.markdown(f"# {tabs[i-1]} \n")
-            st.markdown(data[tabs[i-1]])
+            for t in data[tabs[i-1]].split('\n'):
+                st.markdown(t)
         i-=1
 
 def display(summary: list):

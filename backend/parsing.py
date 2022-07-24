@@ -50,17 +50,17 @@ def parse_txt(NAME):
         if 'Document/H2' in element['Path']:
             if (prevHeader!=""):
                 heading  = element.get('Text', "").strip().title()
-                text = f"\n ### {heading}  "
+                text = f"\n ### {heading}\n"
                 sections[prevHeader] += text
         if 'Document/H3' in element['Path']:
             if prevHeader!="":
                 heading  = element.get('Text', "").strip().title()
-                text = f"\n #### {heading}  "
+                text = f"\n #### {heading}\n"
                 sections[prevHeader] += text
         if '/Document/P' in element['Path']:
             if prevHeader!="":
                 text = element.get('Text', "")
-                sections[prevHeader] += f"{text}  "
+                sections[prevHeader] += f"{text}\n"
     tmp_sections = {}
     for section, section_txt in sections.items():
         tmp_sections[section] = parser(section_txt)
@@ -70,7 +70,7 @@ def parse_txt(NAME):
     
 def parser(txt):
     txt = re.sub(links, "", txt)
-    txt = re.sub("\n", "", txt)
+    # txt = re.sub("\n", "", txt)
     # Comment if does not work
     # txt = txt[txt.lower().find('abstract'):]
     txt = re.sub("-", " ", txt)
